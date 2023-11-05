@@ -7,8 +7,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadonly
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
+#from django_filters.rest_framework import DjangoFilterBackend
+#from rest_framework import filters
 from .pagination import BlogListCreatePagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
@@ -29,7 +29,7 @@ class CategoryListeCreateView(generics.ListCreateAPIView):
 class CategorydetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    liikup_field = 'id' # slug
+    lookup_field = 'id' # slug
     #permission_classes = [IsAdminOrReadOnly]
     
     def retrieve(self, request, *args, **kwargs):
@@ -45,9 +45,9 @@ class BlogListCreateView(generics.ListCreateAPIView):
     serializer_class = BlogSerializer
     permission_classes = [IsAuthenticated] 
     # Filtering
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['category__category_name', 'is_public']
-    search_fields = ['^blog_title', 'blog_description', 'category__category_name']
+    #filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    #filterset_fields = ['category__category_name', 'is_public']
+    #search_fields = ['^blog_title', 'blog_description', 'category__category_name']
     # ordering_fields = ['Post date', 'category__category_name']
     
     # pagination
