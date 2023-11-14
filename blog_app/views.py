@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadonly
 #from django_filters.rest_framework import DjangoFilterBackend
 #from rest_framework import filters
-from .pagination import BlogListCreatePagination
+#from .pagination import BlogListCreatePagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 
@@ -25,6 +25,8 @@ class CategoryListeCreateView(generics.ListCreateAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({'Message': 'No category found'}, status=status.HTTP_404_NOT_FOUND)
+        
+
 
 class CategorydetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
@@ -51,7 +53,7 @@ class BlogListCreateView(generics.ListCreateAPIView):
     # ordering_fields = ['Post date', 'category__category_name']
     
     # pagination
-    pagination_class = BlogListCreatePagination
+    #pagination_class = BlogListCreatePagination
 
     def create(self, request, *args, **kwargs):
         serializer = BlogSerializer(data=request.data, context={'request': request})
@@ -59,11 +61,20 @@ class BlogListCreateView(generics.ListCreateAPIView):
         serializer.save(author=self.request.user)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+    
 
+
+class BlogAuthorList(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = BlogSerializer
+    def get_queryset(self):
+        return Blog.objects.filter(author=self.request.user)
+    
 class BlogDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Blog.objects.filter(is_public = True)
     serializer_class = BlogSerializer
-    liikup_field = 'id' # slug
+    lookup_field = 'id' # slug
     #permission_classes = [IsOwnerOrReadonly]
     
     def retrieve(self, request, *args, **kwargs):
@@ -73,6 +84,8 @@ class BlogDetailView(generics.RetrieveUpdateDestroyAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({'Message': 'No blog Found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    
 
 class BlogCommentListCreateView(generics.ListCreateAPIView):
     queryset = BlogComment.objects.all()

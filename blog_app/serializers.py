@@ -15,7 +15,7 @@ class BlogSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
     class Meta:
         model = Blog
-        fields = ["blog_title",'blog_description','category','comments','author']
+        fields = "__all__"
     
     def get_comments(self, obj):
         comments = BlogComment.objects.filter(blog=obj)[:3]
