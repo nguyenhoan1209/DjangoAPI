@@ -12,7 +12,7 @@ class Category(models.Model):
         return self.category_name
 
 class Blog(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
     blog_title = models.CharField(max_length=100)
     blog_description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="category")

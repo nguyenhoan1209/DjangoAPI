@@ -1,4 +1,3 @@
-from unicodedata import category
 from rest_framework import serializers
 from blog_app.models import Blog, Category, BlogComment
 from django.urls import reverse

@@ -1,3 +1,4 @@
+from os import error
 from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -32,8 +33,8 @@ def user_register_view(request):
                 'refresh': str(refresh),
                 'access': str(refresh.access_token)
             }
-            
+            return Response({"Message": "Register succesful","token": data['token']}, status=status.HTTP_201_CREATED) 
             
         else:
             data = serializer.errors
-        return Response(data)
+            return Response({"Message": "Register fail", "error":data}, status=status.HTTP_403_FORBIDDEN)
